@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="lobsterLanguages" nsURI="http://www.mmdd.kcl/course/languages/lobster/LobsterLanguages"
+    nsPrefix="lobsterLanguages">
+  <eClassifiers xsi:type="ecore:EClass" name="LobsterProgram">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="statements" upperBound="-1"
+        eType="#//Statement" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Statement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="VariableCharacter" eSuperTypes="#//Statement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CreateDatabaseStatement" eSuperTypes="#//Statement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dbname" eType="#//PrimaryExpression"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CreateTableStatement" eSuperTypes="#//Statement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="tbname" eType="#//PrimaryExpression"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dbname" eType="#//PrimaryExpression"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="columns" upperBound="-1"
+        eType="#//CreateTableColumn" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CreateTableColumn">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="columnName" eType="#//PrimaryExpression"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="datatype" eType="#//DataType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="size" eType="#//IntLiteral"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="DataType">
+    <eLiterals name="Integer" literal="Integer"/>
+    <eLiterals name="Character" value="1" literal="Character"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="InsertStatement" eSuperTypes="#//Statement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="column" upperBound="-1"
+        eType="#//PrimaryExpression" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" upperBound="-1"
+        eType="#//PrimaryExpression" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="tbname" eType="#//PrimaryExpression"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DeleteDataStatement" eSuperTypes="#//Statement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="condition" upperBound="-1"
+        eType="#//MoreConditionStatement" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="tbname" eType="#//PrimaryExpression"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MoreConditionStatement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="column" eType="#//PrimaryExpression"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="#//PrimaryExpression"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="morecondition" eType="#//MoreCondition"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="MoreCondition">
+    <eLiterals name="and" literal="and"/>
+    <eLiterals name="or" value="1" literal="or"/>
+    <eLiterals name="finish" value="2" literal="finish"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DeleteTableStatement" eSuperTypes="#//Statement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="tbname" eType="#//PrimaryExpression"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="UpdateStatement" eSuperTypes="#//Statement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="tbname" eType="#//PrimaryExpression"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="setvalue" upperBound="-1"
+        eType="#//ConditionStatement" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="condition" upperBound="-1"
+        eType="#//ConditionStatement" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SelectStatement" eSuperTypes="#//Statement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="caculateCondition" eType="#//CaculateCondition"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="column" eType="#//PrimaryExpression"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="condition" upperBound="-1"
+        eType="#//ConditionStatement" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="tbname" eType="#//PrimaryExpression"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="condition1" upperBound="-1"
+        eType="#//PrimaryExpression" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="order" eType="#//Order"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ConditionStatement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="column" eType="#//PrimaryExpression"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="#//PrimaryExpression"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="CaculateCondition">
+    <eLiterals name="maximum" literal="maximum"/>
+    <eLiterals name="minimum" value="1" literal="minimum"/>
+    <eLiterals name="average" value="2" literal="average"/>
+    <eLiterals name="count" value="3" literal="count"/>
+    <eLiterals name="sum" value="4" literal="sum"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="Order">
+    <eLiterals name="ascending" literal="ascending"/>
+    <eLiterals name="descending" value="1" literal="descending"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PrimaryExpression"/>
+  <eClassifiers xsi:type="ecore:EClass" name="CharLiteral" eSuperTypes="#//PrimaryExpression">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="vac" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IntLiteral" eSuperTypes="#//PrimaryExpression">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="val" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="VariableReference" eSuperTypes="#//PrimaryExpression">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="var" eType="#//VariableCharacter"/>
+  </eClassifiers>
+</ecore:EPackage>

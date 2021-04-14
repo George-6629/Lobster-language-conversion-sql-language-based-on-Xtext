@@ -1,0 +1,111 @@
+grammar kcl.mmdd.course.languages.lobster.LobsterLanguages with org.eclipse.xtext.common.Terminals
+
+generate lobsterLanguages "http://www.mmdd.kcl/course/languages/lobster/LobsterLanguages"
+
+LobsterProgram:
+	statements += Statement*
+;
+
+Statement:
+	CreateDatabaseStatement |
+	CreateTableStatement |
+	InsertStatement | 
+	DeleteDataStatement |
+	DeleteTableStatement |
+	UpdateStatement |
+	SelectStatement |
+	VariableCharacter
+;
+
+VariableCharacter:
+	"var" name=ID "=" value=INT
+	
+;
+
+CreateDatabaseStatement:
+	"Create" "a" "database" "named" dbname= PrimaryExpression
+;
+
+CreateTableStatement:
+	"Create" "a" "table" "named" tbname= PrimaryExpression "in" dbname= PrimaryExpression "include"
+	"{" columns+=CreateTableColumn* "}"
+;
+
+CreateTableColumn:
+	"Column Name:"columnName = PrimaryExpression "is" datatype = DataType "type"
+	("(" "max" size = IntLiteral "characters" ")")? ","?
+;
+
+
+enum DataType:
+	Integer | Character
+;
+
+InsertStatement:
+	"Insert" "value" "{" ("Column Name:"column += PrimaryExpression "is" value += PrimaryExpression ","?)* "}" "into" tbname = PrimaryExpression "table" 
+;
+
+
+DeleteDataStatement:
+	"Delete" "{" condition += MoreConditionStatement* "}"
+	  "from" "Table" tbname = PrimaryExpression  
+;
+
+MoreConditionStatement:
+	"Column Name:"column = PrimaryExpression "is" value = PrimaryExpression morecondition = MoreCondition
+;
+
+enum MoreCondition:
+	and | or | finish
+;
+
+DeleteTableStatement:
+	"Delete All From" tbname = PrimaryExpression "Table"
+;
+
+UpdateStatement:
+	
+	"Update" tbname = PrimaryExpression "Table" 
+	"set" "{" setvalue += ConditionStatement* "}"  
+	"where" "{" condition += ConditionStatement* "}"
+;
+
+SelectStatement:
+	
+	"Find out" (caculateCondition = CaculateCondition "of")? "Column Name:"column= PrimaryExpression
+	"where" "{" condition += ConditionStatement* "}"
+	"from" "Table" tbname = PrimaryExpression ("order by" "{" ("Column Name:"condition1 += PrimaryExpression* ","?)*)? 
+	("sorted in" order = Order)? "}"
+;
+
+ConditionStatement:
+	"Column Name:"column = PrimaryExpression "is" value = PrimaryExpression (",")?
+;
+
+enum CaculateCondition:
+ maximum | minimum | average | count | sum 
+;
+
+enum Order:
+ ascending | descending
+;
+
+PrimaryExpression:
+	IntLiteral |
+	CharLiteral |
+	VariableReference
+;
+
+CharLiteral:
+	vac = STRING
+;
+
+IntLiteral:
+	val=INT
+;
+
+VariableReference:
+	var=[VariableCharacter]
+;
+
+

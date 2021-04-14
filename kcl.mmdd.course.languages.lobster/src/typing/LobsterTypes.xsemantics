@@ -1,0 +1,55 @@
+import kcl.mmdd.course.languages.lobster.lobsterLanguages.CharLiteral
+import kcl.mmdd.course.languages.lobster.lobsterLanguages.CreateDatabaseStatement
+import kcl.mmdd.course.languages.lobster.lobsterLanguages.IntLiteral
+import kcl.mmdd.course.languages.lobster.lobsterLanguages.PrimaryExpression
+import kcl.mmdd.course.languages.lobster.lobsterLanguages.VariableReference
+import kcl.mmdd.course.languages.lobster.validation.AbstractLobsterLanguagesValidator
+import typing.LobsterType
+
+system kcl.mmdd.coursework.lobster.typing.LobsterTypeSystem
+
+validatorExtends AbstractLobsterLanguagesValidator
+
+auxiliary {
+	typeExpressions(Iterable<PrimaryExpression> exps) : LobsterType cached
+}
+
+judgments { 
+	type |- PrimaryExpression exp : output LobsterType
+		cached
+		error "cannot type " + stringRep(exp)
+		subType |- LobsterType left <: LobsterType right
+		error stringRep(left) + " is not a subtype of" + stringRep(right) + " Please include a string in a pair of quotation marks "
+}
+auxiliary typeExpressions(Iterable<PrimaryExpression> exps) {
+	if (exps.forall[exp | 
+			empty |- exp : var LobsterType exp2Type 
+			exp2Type === LobsterType.INT]) {
+		return LobsterType.INT			
+	} else {
+		return LobsterType.STRING
+	}
+}
+
+axiom TIntLit
+	G |- IntLiteral exp : LobsterType.INT
+
+axiom TStringLit
+	G |- CharLiteral exp : LobsterType.STRING
+	
+axiom TVarRef
+	G |- VariableReference exp : LobsterType.INT
+
+rule SubTyping
+	G |- LobsterType left <: LobsterType right
+from {
+	right === LobsterType.INT or left === right
+}
+	
+checkrule checkCreateDatabaseStatement for
+	CreateDatabaseStatement stmt
+from {
+	empty |- stmt.dbname : var LobsterType stepsType
+	empty |- stepsType <: LobsterType.STRING
+}
+
